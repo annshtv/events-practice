@@ -17,6 +17,10 @@ let calendar = document.createElement("input");
 calendar.type = "date";
 calendarContainer.appendChild(calendar);
 
+let time1 = document.createElement("input");
+time1.type = "time";
+calendarContainer.appendChild(time1);
+
 let popUp = document.createElement("div");
 popUp.id = "popUp";
 let popUpContent = document.createElement("div");
@@ -107,7 +111,7 @@ button1.addEventListener("click", function () {
   createInfoEvent.style.transition = "transform 0.3s ease";
   let currentTime = document.createElement("p");
   currentTime.id = "currentTime";
-  currentTime.innerText = "Текущее время: " + moment().format("h:mm:ss a");
+  currentTime.innerText = `Выбранное время: ${time1.value}`;
   createInfoEvent.appendChild(currentTime);
 
   let specifiedTime = document.createElement("p");
