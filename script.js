@@ -12,14 +12,34 @@ button.style.marginBottom = "20px";
 
 let calendarContainer = document.createElement("div");
 document.body.appendChild(calendarContainer);
+calendarContainer.style.display = "flex";
+calendarContainer.style.flexDirection = "column"; 
+calendarContainer.style.alignItems = "flex-start";
+calendarContainer.style.gap = "10px";
 
 let calendar = document.createElement("input");
 calendar.type = "date";
 calendarContainer.appendChild(calendar);
+calendar.style.backgroundColor = "#f0f0f0";
+calendar.style.border = "1px solid #ccc";
+calendar.style.borderRadius = "8px";
+calendar.style.padding = "8px 12px";
+calendar.style.fontSize = "14px";
+calendar.style.width = "150px";
+calendar.style.boxSizing = "border-box";
+calendar.style.marginBottom = "10px";
 
 let time1 = document.createElement("input");
 time1.type = "time";
 calendarContainer.appendChild(time1);
+time1.style.backgroundColor = "#f0f0f0";
+time1.style.border = "1px solid #ccc";
+time1.style.borderRadius = "8px";
+time1.style.padding = "8px 12px";
+time1.style.fontSize = "14px";
+time1.style.width = "150px";
+time1.style.boxSizing = "border-box";
+time1.style.marginBottom = "10px";
 
 let popUp = document.createElement("div");
 popUp.id = "popUp";
@@ -59,6 +79,15 @@ document.body.style.minHeight = "100vh";
 let eventP = document.createElement("input");
 eventP.type = "text";
 eventP.id = "eventP";
+eventP.style.backgroundColor = "#f0f0f0";
+eventP.style.border = "1px solid #ccc";
+eventP.style.borderRadius = "8px";
+eventP.style.padding = "8px 12px";
+eventP.style.fontSize = "14px";
+eventP.style.marginTop = "10px"; 
+eventP.style.width = "100%"; 
+eventP.style.boxSizing = "border-box";
+eventP.style.marginBottom = "10px";
 
 let getCalendar = document.querySelector("#createButton");
 
@@ -91,7 +120,14 @@ let button1 = document.createElement("BUTTON");
 button1.innerHTML = "add";
 button1.id = "but";
 popUpContent.appendChild(button1);
-
+button1.style.backgroundColor = "#4CAF50";
+button1.style.color = "white";
+button1.style.border = "none";
+button1.style.borderRadius = "12px";
+button1.style.padding = "10px 20px"; 
+button1.style.fontSize = "16px"; 
+button1.style.marginLeft = "auto"; 
+button1.style.marginRight = "auto";
 button1.addEventListener("click", function () {
   let inputValue = eventP.value;
 
