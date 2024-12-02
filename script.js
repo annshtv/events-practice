@@ -13,12 +13,13 @@ button.style.marginBottom = "20px";
 let calendarContainer = document.createElement("div");
 document.body.appendChild(calendarContainer);
 calendarContainer.style.display = "flex";
-calendarContainer.style.flexDirection = "column"; 
+calendarContainer.style.flexDirection = "column";
 calendarContainer.style.alignItems = "flex-start";
 calendarContainer.style.gap = "10px";
 
 let calendar = document.createElement("input");
 calendar.type = "date";
+calendar.id = "calendar";
 calendarContainer.appendChild(calendar);
 calendar.style.backgroundColor = "#f0f0f0";
 calendar.style.border = "1px solid #ccc";
@@ -84,8 +85,8 @@ eventP.style.border = "1px solid #ccc";
 eventP.style.borderRadius = "8px";
 eventP.style.padding = "8px 12px";
 eventP.style.fontSize = "14px";
-eventP.style.marginTop = "10px"; 
-eventP.style.width = "100%"; 
+eventP.style.marginTop = "10px";
+eventP.style.width = "100%";
 eventP.style.boxSizing = "border-box";
 eventP.style.marginBottom = "10px";
 
@@ -124,42 +125,66 @@ button1.style.backgroundColor = "#4CAF50";
 button1.style.color = "white";
 button1.style.border = "none";
 button1.style.borderRadius = "12px";
-button1.style.padding = "10px 20px"; 
-button1.style.fontSize = "16px"; 
-button1.style.marginLeft = "auto"; 
+button1.style.padding = "10px 20px";
+button1.style.fontSize = "16px";
+button1.style.marginLeft = "auto";
 button1.style.marginRight = "auto";
+
+let events = [];
+let eventListContainer = document.createElement("div");
+eventListContainer.id = "eventListContainer";
+document.body.appendChild(eventListContainer);
+
 button1.addEventListener("click", function () {
   let inputValue = eventP.value;
 
   if (!inputValue) return;
+  let eventDate = calendar.value;
+  let eventTime = time1.value;
+  let newEvent = {
+    date: eventDate,
+    time: eventTime,
+    text: inputValue,
+  };
 
-  let createInfoEvent = document.createElement("div");
-  createInfoEvent.id = "createInfoEvent";
-  createInfoEvent.style.backgroundColor = "#778899";
-  createInfoEvent.style.width = "250px";
-  createInfoEvent.style.height = "auto";
-  createInfoEvent.style.padding = "15px";
-  createInfoEvent.style.margin = "10px 0";
-  createInfoEvent.style.borderRadius = "15px";
-  createInfoEvent.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+  events.push(newEvent);
+  sortEvents();
 
-  createInfoEvent.style.border = "1px solid #A9A9A9";
-  createInfoEvent.style.transition = "transform 0.3s ease";
-  let currentTime = document.createElement("p");
-  currentTime.id = "currentTime";
-  currentTime.innerText = `Выбранное время: ${time1.value}`;
-  createInfoEvent.appendChild(currentTime);
-
-  let specifiedTime = document.createElement("p");
-  specifiedTime.id = "specifiedTime";
-
-  let eventText = document.createElement("p");
-  eventText.id = "eventText";
-  eventText.innerText = "Ваше событие: " + inputValue;
-  createInfoEvent.appendChild(eventText);
-
-  document.body.appendChild(createInfoEvent);
+  eventP.value = "";
+  calendar.value = "";
+  time1.value = "";
 });
+
+const sortEvents = () => {
+  events.sort((a, b) => {
+    let dateTimeA = `${a.date}T${a.time}`;
+    let dateTimeB = `${b.date}T${b.time}`;
+    return dateTimeA.localeCompare(dateTimeB);
+  });
+  eventListContainer.innerHTML = "";
+  events.forEach((event) => {
+    let eventDiv = document.createElement("div");
+    eventDiv.style.backgroundColor = "#778899";
+    eventDiv.style.width = "250px";
+    eventDiv.style.height = "auto";
+    eventDiv.style.padding = "15px";
+    eventDiv.style.margin = "10px 0";
+    eventDiv.style.borderRadius = "15px";
+    eventDiv.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+    eventDiv.style.border = "1px solid #A9A9A9";
+    eventDiv.style.transition = "transform 0.3s ease";
+
+    let eventTimeDisplay = document.createElement("p");
+    eventTimeDisplay.innerText = `Дата: ${event.date}, Время: ${event.time}`;
+    eventDiv.appendChild(eventTimeDisplay);
+
+    let eventText = document.createElement("p");
+    eventText.innerText = `Событие: ${event.text}`;
+    eventDiv.appendChild(eventText);
+
+    eventListContainer.appendChild(eventDiv);
+  });
+};
 
 time.innerText = moment().format("h:mm:ss a");
 
