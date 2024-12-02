@@ -10,6 +10,9 @@ button.style.height = "30px";
 button.style.width = "70px";
 button.style.marginBottom = "20px";
 
+let calendarDiv = document.createElement("div")
+calendarDiv.id = "container";
+
 let calendarContainer = document.createElement("div");
 document.body.appendChild(calendarContainer);
 calendarContainer.style.display = "flex";
@@ -70,7 +73,7 @@ document.body.appendChild(popUp);
 popUp.style.width = "300px";
 popUp.style.height = "250px";
 popUp.style.backgroundColor = "#B0C4DE";
-popUp.style.position = "absolute";
+popUp.style.position = "fixed";
 popUp.style.borderRadius = "30px";
 popUp.style.left = "50%";
 popUp.style.top = "50%";
@@ -131,16 +134,98 @@ button1.style.marginLeft = "auto";
 button1.style.marginRight = "auto";
 
 let events = [];
-let eventListContainer = document.createElement("div");
-eventListContainer.id = "eventListContainer";
-document.body.appendChild(eventListContainer);
+
+let weekContainer = document.createElement("div");
+weekContainer.id = "weekContainer";
+document.body.appendChild(weekContainer);
+
+weekContainer.style.display = "flex";
+weekContainer.style.justifyContent = "space-between";
+weekContainer.style.width = "100%";
+
+let daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
+
+let columns = [];
+daysOfWeek.forEach((day, index) => {
+  let dayColumn = document.createElement("div");
+  dayColumn.classList.add("dayColumn");
+  dayColumn.style.border = "1px solid #ccc";
+  dayColumn.style.padding = "10px";
+  dayColumn.style.flex = "1";
+  dayColumn.style.minHeight = "200px";
+  dayColumn.style.boxSizing = "border-box";
+  dayColumn.style.margin = "5px";
+  let dayHeader = document.createElement("h3");
+  dayHeader.innerText = day;
+  dayColumn.appendChild(dayHeader);
+  dayColumn.id = day.toLowerCase();
+  weekContainer.appendChild(dayColumn);
+  columns.push(dayColumn);
+});
+
+const updateWeekContainer = () => {
+  columns.forEach(column => {
+
+    let dayHeader = column.querySelector("h3");
+    let eventsContainer = column.querySelector(".events-container");
+
+    if (!eventsContainer) {
+      eventsContainer = document.createElement("div");
+      eventsContainer.classList.add("events-container");
+      column.appendChild(eventsContainer);
+    }
+
+    eventsContainer.innerHTML = ""; 
+  });
+
+  events.forEach(event => {
+    let date = new Date(event.date);
+    let dayIndex = date.getDay();
+
+    if (dayIndex === 0) {
+      dayIndex = 6;
+    } else {
+      dayIndex -= 1;
+    }
+
+    let dayColumn = columns[dayIndex];
+    let eventsContainer = dayColumn.querySelector(".events-container");
+
+    let eventDiv = document.createElement("div");
+    eventDiv.style.backgroundColor = "#778899";
+    eventDiv.style.padding = "10px";
+    eventDiv.style.marginTop = "10px";
+    eventDiv.style.borderRadius = "5px";
+    eventDiv.style.color = "white";
+
+    let eventTime = document.createElement("p");
+    eventTime.innerHTML = `Время: ${event.time}`;
+
+    let eventText = document.createElement("p");
+    eventText.innerHTML = `Событие: ${event.text}`;
+
+    let eventDate = document.createElement("p");
+    eventDate.innerHTML = `Дата: ${event.date}`;
+
+    eventDiv.appendChild(eventTime);
+    eventDiv.appendChild(eventDate);
+    eventDiv.appendChild(eventText);
+
+    eventsContainer.appendChild(eventDiv);
+  });
+};
 
 button1.addEventListener("click", function () {
   let inputValue = eventP.value;
-
   if (!inputValue) return;
   let eventDate = calendar.value;
   let eventTime = time1.value;
+
+  if (!eventDate || !eventTime) {
+    alert("Пожалуйста, выберите дату и время.");
+    return;
+  }
+
   let newEvent = {
     date: eventDate,
     time: eventTime,
@@ -148,45 +233,12 @@ button1.addEventListener("click", function () {
   };
 
   events.push(newEvent);
-  sortEvents();
+  updateWeekContainer();
 
   eventP.value = "";
   calendar.value = "";
   time1.value = "";
 });
-
-const sortEvents = () => {
-  events.sort((a, b) => {
-    let dateTimeA = `${a.date}T${a.time}`;
-    let dateTimeB = `${b.date}T${b.time}`;
-    return dateTimeA.localeCompare(dateTimeB);
-  });
-  eventListContainer.innerHTML = "";
-  events.forEach((event) => {
-    let eventDiv = document.createElement("div");
-    eventDiv.style.backgroundColor = "#778899";
-    eventDiv.style.width = "250px";
-    eventDiv.style.height = "auto";
-    eventDiv.style.padding = "15px";
-    eventDiv.style.margin = "10px 0";
-    eventDiv.style.borderRadius = "15px";
-    eventDiv.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
-    eventDiv.style.border = "1px solid #A9A9A9";
-    eventDiv.style.transition = "transform 0.3s ease";
-
-    let eventTimeDisplay = document.createElement("p");
-    eventTimeDisplay.innerText = `Дата: ${event.date}, Время: ${event.time}`;
-    eventDiv.appendChild(eventTimeDisplay);
-
-    let eventText = document.createElement("p");
-    eventText.innerText = `Событие: ${event.text}`;
-    eventDiv.appendChild(eventText);
-
-    eventListContainer.appendChild(eventDiv);
-  });
-};
-
-time.innerText = moment().format("h:mm:ss a");
 
 document.addEventListener("click", function (event) {
   if (event.target.tagName === "HTML" || event.target.tagName === "BODY") {
