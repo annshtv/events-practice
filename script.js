@@ -10,7 +10,7 @@ button.style.height = "30px";
 button.style.width = "70px";
 button.style.marginBottom = "20px";
 
-let calendarDiv = document.createElement("div")
+let calendarDiv = document.createElement("div");
 calendarDiv.id = "container";
 
 let calendarContainer = document.createElement("div");
@@ -163,9 +163,16 @@ daysOfWeek.forEach((day, index) => {
   columns.push(dayColumn);
 });
 
+const sortEvents = () => {
+  events.sort((a, b) => {
+    let dateTimeA = `${a.date}T${a.time}`;
+    let dateTimeB = `${b.date}T${b.time}`;
+    return dateTimeA.localeCompare(dateTimeB);
+  });
+};
+
 const updateWeekContainer = () => {
   columns.forEach(column => {
-
     let dayHeader = column.querySelector("h3");
     let eventsContainer = column.querySelector(".events-container");
 
@@ -215,6 +222,7 @@ const updateWeekContainer = () => {
   });
 };
 
+
 button1.addEventListener("click", function () {
   let inputValue = eventP.value;
   if (!inputValue) return;
@@ -233,6 +241,7 @@ button1.addEventListener("click", function () {
   };
 
   events.push(newEvent);
+  sortEvents(); 
   updateWeekContainer();
 
   eventP.value = "";
